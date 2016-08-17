@@ -62,7 +62,7 @@ Short Form    | Long Form     | Description
 
 ##License
 
-HOST3R is licensed under the GNU GPL license. take a look at the [LICENSE](https://github.com/rbcafe/host3r/LICENSE) .
+HOST3R is licensed under the GNU GPL license. take a look at the [LICENSE](https://github.com/rbcafe/host3r/blob/master/LICENSE) .
 
 ##Credits
 
