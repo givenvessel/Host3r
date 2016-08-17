@@ -7,7 +7,7 @@ HOST3R is a python tool that is designed to enumerate subdomains of a specific d
 ##Installation
 
 ```
-git clone https://github.com/rbcafe/host3r.git
+git clone https://github.com/rbcafe/host3r
 ```
 
 ##Recommended Python Version:
