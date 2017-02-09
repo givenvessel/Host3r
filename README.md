@@ -1,7 +1,7 @@
-##About HOST3R
+##About host3r
 
 
-HOST3R is a python tool that is designed to enumerate subdomains of a specific domain to ban. Generate a search of subdomains and paste results to your /etc/hosts file. Generate a search of subdomains and save results to a text file.
+host3r is a python tool that is designed to enumerate subdomains of a specific domain to ban. Generate a search of subdomains and paste results to your /etc/hosts file. Generate a search of subdomains and save results to a text file.
 
 
 ##Installation
@@ -62,11 +62,11 @@ Short Form    | Long Form     | Description
 
 ##License
 
-HOST3R is licensed under the GNU GPL license. [LICENSE](https://github.com/rbcafe/host3r/blob/master/LICENSE) .
+host3r is licensed under the GNU GPL license. [LICENSE](https://github.com/rbcafe/host3r/blob/master/LICENSE) .
 
 ##Credits
 
-* [Sublist3r](https://github.com/aboul3la/) - HOST3R is based on the sublist3r script.
+* [Sublist3r](https://github.com/aboul3la/) - host3r is based on the sublist3r script.
 
 ##Version
 **Current version is 0.1**
