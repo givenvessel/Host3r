@@ -64,7 +64,7 @@ Short Form    | Long Form     | Description
 
 host3r is licensed under the GNU GPL license. [LICENSE](https://github.com/rbcafe/host3r/blob/master/LICENSE) .
 
-##Credits
+## Credits
 
 * [Sublist3r](https://github.com/aboul3la/) - host3r is based on the sublist3r script.
 
