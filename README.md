@@ -71,3 +71,7 @@ host3r is licensed under the GNU GPL license. [LICENSE](https://github.com/rbcaf
 ## Version
 
 **Current version is 0.1**
+
+## More information
+
+http://www.rbcafe.com/software/host3r/
