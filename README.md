@@ -5,7 +5,7 @@
 <img src="https://www.rbcafe.com/wp-content/uploads/host3r_python_script.png" alt="host3r" width="400">
 </p>
 
-host3r is a python tool that is designed to enumerate subdomains of a specific domain to ban. Generate a search of subdomains and paste results to your /etc/hosts file. Generate a search of subdomains and save results to a text file.
+host3r is a python tool that is designed to enumerate the subdomains of a specific domain to ban. Generate a search of the subdomains and paste the results to your /etc/hosts file. Generate a search of the subdomains and save the results to a text file.
 
 
 ## Installation
