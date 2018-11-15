@@ -18,8 +18,12 @@ import os
 import argparse
 import time
 import requests
-import urlparse
-import urllib
+if sys.version > '3':
+    import urllib.parse as urlparse
+    import urllib.parse as urllib
+else:
+    import urlparse
+    import urllib
 import hashlib
 import random
 import multiprocessing
@@ -28,7 +32,10 @@ import traceback
 import dns.resolver
 import socket
 from collections import Counter
-from Queue import Queue
+if sys.version > '3':
+    from queue import Queue
+else:
+    from Queue import Queue
 
 
 #######################
@@ -57,7 +64,7 @@ is_windows = sys.platform.startswith('win')
 
 
 def banner():
-    print """
+    print ("""
 ::::::::::::::::::::cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 ::::::::::::::::::ccccccccc;;;;;;ccccccccccccccccclcllllllllllcccccccccccccccccc
 ::::::::::::::::cccccc:::,,'.;;cc;,cccccccclllllllllllllllllllllllllllllcccccccc
@@ -94,7 +101,7 @@ ccccccccccccc;;,cXXXXWMMMMMMMMMMMMMMMMMMMMMMMMMoodddddddddddddddddddddoooooooooo
 # Inited By Ahmed Aboul-Ela @aboul3la
 # Modded By Rbcafe
 #####################################
-"""
+""")
 
 
 #######################
@@ -104,8 +111,8 @@ ccccccccccccc;;,cXXXXWMMMMMMMMMMMMMMMMMMMMMMMMMoodddddddddddddddddddddoooooooooo
 
 def parser_error(errmsg):
     banner()
-    print "[!] NOTE : USAGE : python " + sys.argv[0] + " [Options] use -h"
-    print "[!] NOTE : ERROR : " + errmsg + "\n"
+    print ("[!] NOTE : USAGE : python " + sys.argv[0] + " [Options] use -h")
+    print ("[!] NOTE : ERROR : " + errmsg + "\n")
     sys.exit()
 
 
@@ -132,10 +139,9 @@ def parse_args():
 
 
 def write_file(filename, subdomains):
-    print "\n[!] NOTE : SAVING RESULT : %s" % (filename)
+    print ("\n[!] NOTE : SAVING RESULT : %s" % (filename))
     with open(str(filename), 'wb') as f:
-        f.write(
-            "#####################################\n#HOST3R\n#####################################\n\n")
+        f.write("#####################################\n#HOST3R\n#####################################\n\n")
         f.write("#BLOCK IPv4 SUBDOMAINS :\n\n")
         for subdomain in subdomains:
             f.write("127.0.0.1  " + subdomain + "\r\n")
@@ -163,7 +169,7 @@ class enumratorBase(object):
         self.print_banner()
 
     def print_banner(self):
-        print "[-] SEARCHING : %s" % (self.engine_name)
+        print ("[-] SEARCHING : %s" % (self.engine_name))
         return
 
     def send_req(self, query, page_no=1):
@@ -179,8 +185,8 @@ class enumratorBase(object):
             resp = self.session.get(url, headers=headers, timeout=self.timeout)
         except Exception as e:
             if exception:
-                print "[!] NOTE : ERROR : %s" % (self.engine_name)
-                print "[!] NOTE : ERROR : %s" % e
+                print ("[!] NOTE : ERROR : %s" % (self.engine_name))
+                print ("[!] NOTE : ERROR : %s" % e)
             resp = None
             pass
         return self.get_response(resp)
@@ -295,19 +301,19 @@ class GoogleEnum(enumratorBaseThreaded):
                 subdomain = urlparse.urlparse(link).netloc
                 if subdomain and subdomain not in self.subdomains and subdomain != self.domain:
                     if verbose:
-                        print "[-] DIGGING : %s : %s" % (self.engine_name, subdomain)
+                        print ("[-] DIGGING : %s : %s" % (self.engine_name, subdomain))
                     self.subdomains.append(subdomain.strip())
         except Exception as e:
             if exception:
-                print "[!] NOTE : ERROR : %s" % (self.engine_name)
-                print "[!] NOTE : ERROR : %s" % e
+                print ("[!] NOTE : ERROR : %s" % (self.engine_name))
+                print ("[!] NOTE : ERROR : %s" % e)
             pass
         return links_list
 
     def check_response_errors(self, resp):
         if 'Our systems have detected unusual traffic' in resp:
             if verbose:
-                print "[!] NOTE : ERROR : GOOGLE BLOCK"
+                print ("[!] NOTE : ERROR : GOOGLE BLOCK")
             return False
         return True
 
@@ -361,12 +367,12 @@ class YahooEnum(enumratorBaseThreaded):
                     continue
                 if subdomain and subdomain not in self.subdomains and subdomain != self.domain:
                     if verbose:
-                        print "[-] DIGGING : %s : %s" % (self.engine_name, subdomain)
+                        print ("[-] DIGGING : %s : %s" % (self.engine_name, subdomain))
                     self.subdomains.append(subdomain.strip())
         except Exception as e:
             if exception:
-                print "[!] NOTE : ERROR : %s" % (self.engine_name)
-                print "[!] NOTE : ERROR : %s" % e
+                print ("[!] NOTE : ERROR : %s" % (self.engine_name))
+                print ("[!] NOTE : ERROR : %s" % e)
             pass
         return links_list
 
@@ -414,12 +420,12 @@ class AskEnum(enumratorBaseThreaded):
                 subdomain = urlparse.urlparse(link).netloc
                 if subdomain not in self.subdomains and subdomain != self.domain:
                     if verbose:
-                        print "[-] DIGGING : %s : %s" % (self.engine_name, subdomain)
+                        print ("[-] DIGGING : %s : %s" % (self.engine_name, subdomain))
                     self.subdomains.append(subdomain.strip())
         except Exception as e:
             if exception:
-                print "[!] NOTE : ERROR : %s" % (self.engine_name)
-                print "[!] NOTE : ERROR : %s" % e
+                print ("[!] NOTE : ERROR : %s" % (self.engine_name))
+                print ("[!] NOTE : ERROR : %s" % e)
             pass
         return links_list
 
@@ -468,12 +474,12 @@ class BingEnum(enumratorBaseThreaded):
                 subdomain = urlparse.urlparse(link).netloc
                 if subdomain not in self.subdomains and subdomain != self.domain:
                     if verbose:
-                        print "[-] DIGGING : %s : %s" % (self.engine_name, subdomain)
+                        print ("[-] DIGGING : %s : %s" % (self.engine_name, subdomain))
                     self.subdomains.append(subdomain.strip())
         except Exception as e:
             if exception:
-                print "[!] NOTE : ERROR : %s" % (self.engine_name)
-                print "[!] NOTE : ERROR : %s" % e
+                print ("[!] NOTE : ERROR : %s" % (self.engine_name))
+                print ("[!] NOTE : ERROR : %s" % e)
             pass
         return links_list
 
@@ -522,12 +528,12 @@ class BaiduEnum(enumratorBaseThreaded):
                     if subdomain not in self.subdomains and subdomain != self.domain:
                         found_newdomain = True
                         if verbose:
-                            print "[-] DIGGING : %s : %s" % (self.engine_name, subdomain)
+                            print ("[-] DIGGING : %s : %s" % (self.engine_name, subdomain))
                         self.subdomains.append(subdomain.strip())
         except Exception as e:
             if exception:
-                print "[!] NOTE : ERROR : %s" % (self.engine_name)
-                print "[!] NOTE : ERROR : %s" % e
+                print ("[!] NOTE : ERROR : %s" % (self.engine_name))
+                print ("[!] NOTE : ERROR : %s" % e)
             pass
         if not found_newdomain and subdomain_list:
             self.querydomain = self.findsubs(subdomain_list)
@@ -586,7 +592,7 @@ class NetcraftEnum(multiprocessing.Process):
         return
 
     def print_banner(self):
-        print "[-] SEARCHING : %s" % (self.engine_name)
+        print ("[-] SEARCHING : %s" % (self.engine_name))
         return
 
     def req(self, url, cookies=None):
@@ -602,8 +608,8 @@ class NetcraftEnum(multiprocessing.Process):
                 url, headers=headers, timeout=self.timeout, cookies=cookies)
         except Exception as e:
             if exception:
-                print "[!] NOTE : ERROR : %s" % (self.engine_name)
-                print "[!] NOTE : ERROR : %s" % e
+                print ("[!] NOTE : ERROR : %s" % (self.engine_name))
+                print ("[!] NOTE : ERROR : %s" % e)
             resp = None
         return resp
 
@@ -627,8 +633,7 @@ class NetcraftEnum(multiprocessing.Process):
         cookies = dict()
         cookies_list = cookie[0:cookie.find(';')].split("=")
         cookies[cookies_list[0]] = cookies_list[1]
-        cookies['netcraft_js_verification_response'] = hashlib.sha1(
-            urllib.unquote(cookies_list[1])).hexdigest()
+        cookies['netcraft_js_verification_response'] = hashlib.sha1(urllib.unquote(cookies_list[1]).encode('utf-8')).hexdigest()
         return cookies
 
     def get_cookies(self, headers):
@@ -662,12 +667,12 @@ class NetcraftEnum(multiprocessing.Process):
                     continue
                 if subdomain and subdomain not in self.subdomains and subdomain != self.domain:
                     if verbose:
-                        print "[-] DIGGING : %s : %s" % (self.engine_name, subdomain)
+                        print ("[-] DIGGING : %s : %s" % (self.engine_name, subdomain))
                     self.subdomains.append(subdomain.strip())
         except Exception as e:
             if exception:
-                print "[!] NOTE : ERROR : %s" % (self.engine_name)
-                print "[!] NOTE : ERROR : %s" % e
+                print ("[!] NOTE : ERROR : %s" % (self.engine_name))
+                print ("[!] NOTE : ERROR : %s" % e)
             pass
         return links_list
 
@@ -702,7 +707,7 @@ class DNSdumpster(multiprocessing.Process):
         return
 
     def print_banner(self):
-        print "[-] SEARCHING : %s" % (self.engine_name)
+        print ("[-] SEARCHING : %s" % (self.engine_name))
         return
 
     def check_host(self, host):
@@ -714,12 +719,12 @@ class DNSdumpster(multiprocessing.Process):
             ip = Resolver.query(host, 'A')[0].to_text()
             if ip:
                 if verbose:
-                    print "[-] DIGGING : %s : %s" % (self.engine_name, host)
+                    print ("[-] DIGGING : %s : %s" % (self.engine_name, host))
                 is_valid = True
                 self.live_subdomains.append(host)
         except:
             if exception:
-                print "[!] NOTE : ERROR : %s" % (self.engine_name)
+                print ("[!] NOTE : ERROR : %s" % (self.engine_name))
             pass
         self.lock.release()
         return is_valid
@@ -742,8 +747,8 @@ class DNSdumpster(multiprocessing.Process):
                     url, data=params, headers=headers, timeout=self.timeout)
         except Exception as e:
             if exception:
-                print "[!] NOTE : ERROR : %s" % (self.engine_name)
-                print "[!] NOTE : ERROR : %s" % e
+                print ("[!] NOTE : ERROR : %s" % (self.engine_name))
+                print ("[!] NOTE : ERROR : %s" % e)
             resp = None
         return self.get_response(resp)
 
@@ -782,7 +787,7 @@ class DNSdumpster(multiprocessing.Process):
             results_tbl = tbl_regex.findall(resp)[0]
         except IndexError:
             if exception:
-                print "[!] NOTE : ERROR : %s" % (self.engine_name)
+                print ("[!] NOTE : ERROR : %s" % (self.engine_name))
             results_tbl = ''
         links_list = link_regex.findall(results_tbl)
         links = list(set(links_list))
@@ -823,7 +828,7 @@ class Virustotal(multiprocessing.Process):
         return
 
     def print_banner(self):
-        print "[-] SEARCHING : %s" % (self.engine_name)
+        print ("[-] SEARCHING : %s" % (self.engine_name))
         return
 
     def req(self, url):
@@ -837,8 +842,8 @@ class Virustotal(multiprocessing.Process):
             resp = self.session.get(url, headers=headers, timeout=self.timeout)
         except Exception as e:
             if exception:
-                print "[!] NOTE : ERROR : %s" % (self.engine_name)
-                print "[!] NOTE : ERROR : %s" % e
+                print ("[!] NOTE : ERROR : %s" % (self.engine_name))
+                print ("[!] NOTE : ERROR : %s" % e)
             resp = None
         return self.get_response(resp)
 
@@ -867,11 +872,11 @@ class Virustotal(multiprocessing.Process):
                     continue
                 if subdomain not in self.subdomains and subdomain != self.domain:
                     if verbose:
-                        print "[-] DIGGING : %s : %s" % (self.engine_name, subdomain)
+                        print ("[-] DIGGING : %s : %s" % (self.engine_name, subdomain))
                     self.subdomains.append(subdomain.strip())
         except Exception as e:
             if exception:
-                print "[!] NOTE : ERROR : %s" % (self.engine_name)
+                print ("[!] NOTE : ERROR : %s" % (self.engine_name))
             pass
 
 
@@ -903,7 +908,7 @@ class ThreatCrowd(multiprocessing.Process):
         return
 
     def print_banner(self):
-        print "[-] SEARCHING : %s" % (self.engine_name)
+        print ("[-] SEARCHING : %s" % (self.engine_name))
         return
 
     def req(self, url):
@@ -917,7 +922,7 @@ class ThreatCrowd(multiprocessing.Process):
             resp = self.session.get(url, headers=headers, timeout=self.timeout)
         except Exception as e:
             if exception:
-                print "[!] NOTE : ERROR : %s" % (self.engine_name)
+                print ("[!] NOTE : ERROR : %s" % (self.engine_name))
             resp = None
         return self.get_response(resp)
 
@@ -940,8 +945,8 @@ class ThreatCrowd(multiprocessing.Process):
             import json
         except Exception as e:
             if exception:
-                print "[!] NOTE : ERROR : %s" % (self.engine_name)
-                print "[!] NOTE : ERROR : %s" % e
+                print ("[!] NOTE : ERROR : %s" % (self.engine_name))
+                print ("[!] NOTE : ERROR : %s" % e)
             return
         try:
             links = json.loads(resp)['subdomains']
@@ -951,12 +956,12 @@ class ThreatCrowd(multiprocessing.Process):
                     continue
                 if subdomain not in self.subdomains and subdomain != self.domain:
                     if verbose:
-                        print "[-] DIGGING : %s : %s" % (self.engine_name, subdomain)
+                        print ("[-] DIGGING : %s : %s" % (self.engine_name, subdomain))
                     self.subdomains.append(subdomain.strip())
         except Exception as e:
             if exception:
-                print "[!] NOTE : ERROR : %s" % (self.engine_name)
-                print "[!] NOTE : ERROR : %s" % e
+                print ("[!] NOTE : ERROR : %s" % (self.engine_name))
+                print ("[!] NOTE : ERROR : %s" % e)
             pass
 
 
@@ -988,7 +993,7 @@ class CrtSearch(multiprocessing.Process):
         return
 
     def print_banner(self):
-        print "[-] SEARCHING : %s" % (self.engine_name)
+        print ("[-] SEARCHING : %s" % (self.engine_name))
         return
 
     def req(self, url):
@@ -1002,7 +1007,7 @@ class CrtSearch(multiprocessing.Process):
             resp = self.session.get(url, headers=headers, timeout=self.timeout)
         except Exception as e:
             if exception:
-                print "[!] NOTE : ERROR : %s" % (self.engine_name)
+                print ("[!] NOTE : ERROR : %s" % (self.engine_name))
             resp = None
         return self.get_response(resp)
 
@@ -1031,11 +1036,11 @@ class CrtSearch(multiprocessing.Process):
                     continue
                 if subdomain not in self.subdomains and subdomain != self.domain:
                     if verbose:
-                        print "[-] DIGGING : %s : %s" % (self.engine_name, subdomain)
+                        print ("[-] DIGGING : %s : %s" % (self.engine_name, subdomain))
                     self.subdomains.append(subdomain.strip())
         except Exception as e:
             if exception:
-                print "[!] NOTE : ERROR : %s" % (self.engine_name)
+                print ("[!] NOTE : ERROR : %s" % (self.engine_name))
             pass
 
 
@@ -1067,7 +1072,7 @@ class PassiveDNS(multiprocessing.Process):
         return
 
     def print_banner(self):
-        print "[-] SEARCHING : %s" % (self.engine_name)
+        print ("[-] SEARCHING : %s" % (self.engine_name))
         return
 
     def req(self, url):
@@ -1081,8 +1086,8 @@ class PassiveDNS(multiprocessing.Process):
             resp = self.session.get(url, headers=headers, timeout=self.timeout)
         except Exception as e:
             if exception:
-                print "[!] NOTE : ERROR : %s" % (self.engine_name)
-                print "[!] NOTE : ERROR : %s" % e
+                print ("[!] NOTE : ERROR : %s" % (self.engine_name))
+                print ("[!] NOTE : ERROR : %s" % e)
             resp = None
         return self.get_response(resp)
 
@@ -1110,11 +1115,11 @@ class PassiveDNS(multiprocessing.Process):
                 subdomain = link[:link.find('[')].strip()
                 if subdomain not in self.subdomains and subdomain != self.domain and subdomain.endswith(self.domain):
                     if verbose:
-                        print "[-] DIGGING : %s : %s" % (self.engine_name, subdomain)
+                        print ("[-] DIGGING : %s : %s" % (self.engine_name, subdomain))
                     self.subdomains.append(subdomain.strip())
         except Exception as e:
             if exception:
-                print "[!] NOTE : ERROR : %s" % (self.engine_name)
+                print ("[!] NOTE : ERROR : %s" % (self.engine_name))
             pass
 
 
@@ -1162,7 +1167,7 @@ def main():
     domain_check = re.compile(
         "^(http|https)?[a-zA-Z0-9]+([\-\.]{1}[a-zA-Z0-9]+)*\.[a-zA-Z]{2,}$")
     if not domain_check.match(domain):
-        print "\n[!] NOTE : ERROR : ENTER A VALID DOMAIN\n"
+        print ("\n[!] NOTE : ERROR : ENTER A VALID DOMAIN\n")
         sys.exit()
     if not domain.startswith('http://') or not domain.startswith('https://'):
         domain = 'http://' + domain
@@ -1175,13 +1180,13 @@ def main():
 
     banner()
     parsed_domain = urlparse.urlparse(domain)
-    print "[!] NOTE : ENUMERATING SUBDOMAINS TO ADD FOR : %s" % parsed_domain.netloc
+    print ("[!] NOTE : ENUMERATING SUBDOMAINS TO ADD FOR : %s" % parsed_domain.netloc)
     if verbose:
-        print "[!] NOTE : VERBOSITY ACTIVATED"
+        print ("[!] NOTE : VERBOSITY ACTIVATED")
     if ipv6:
-        print "[!] NOTE : IPV6 TO HOST ACTIVATED"
+        print ("[!] NOTE : IPV6 TO HOST ACTIVATED")
     if exception:
-        print "[!] NOTE : EXCEPTIONS NOTICES ACTIVATED"
+        print ("[!] NOTE : EXCEPTIONS NOTICES ACTIVATED")
 
 
 #######################
@@ -1189,8 +1194,8 @@ def main():
 #######################
 
 
-    enums = [enum(domain, verbose, q=subdomains_queue) for enum in BaiduEnum, YahooEnum, GoogleEnum, BingEnum,
-             AskEnum, NetcraftEnum, DNSdumpster, Virustotal, ThreatCrowd, CrtSearch, PassiveDNS]
+    enums = [enum(domain, verbose, q=subdomains_queue) for enum in (BaiduEnum, YahooEnum, GoogleEnum, BingEnum,
+             AskEnum, NetcraftEnum, DNSdumpster, Virustotal, ThreatCrowd, CrtSearch, PassiveDNS)]
     for enum in enums:
         enum.start()
     for enum in enums:
@@ -1200,18 +1205,18 @@ def main():
         search_list.add(subdomain)
     if subdomains:
         subdomains = sorted(subdomains)
-        print "[!] NOTE : SUBDOMAINS LIST : %s TO ADD \n" % len(subdomains)
-        print "#####################################\n#HOST3R\n#####################################\n"
-        print "#BLOCK IPv4 SUBDOMAINS : %s\n" % parsed_domain.netloc
+        print ("[!] NOTE : SUBDOMAINS LIST : %s TO ADD \n" % len(subdomains))
+        print ("#####################################\n#HOST3R\n#####################################\n")
+        print ("#BLOCK IPv4 SUBDOMAINS : %s\n" % parsed_domain.netloc)
         for subdomain in subdomains:
-            print "127.0.0.1  " + subdomain
+            print ("127.0.0.1  " + subdomain)
         if ipv6:
-            print "\n#BLOCK IPv6 SUBDOMAINS : %s\n" % parsed_domain.netloc
+            print ("\n#BLOCK IPv6 SUBDOMAINS : %s\n" % parsed_domain.netloc)
             for subdomain in subdomains:
-                print "::1  " + subdomain
+                print ("::1  " + subdomain)
         if savefile:
             write_file(savefile, subdomains)
-        print "\n#####################################"
+        print ("\n#####################################")
 
 if __name__ == "__main__":
     main()
